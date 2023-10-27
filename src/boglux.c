@@ -1,4 +1,4 @@
-#include <lib/command_parsing.h>
+#include "../lib/command_parsing.h"
 
 int main()
 {

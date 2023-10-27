@@ -3,26 +3,22 @@ CC = gcc
 OUT = boglux
 
 # Directories
-
 LIB_DIR = lib
 SRC_DIR = src
 
 # Flags for warnings and include directories
-
 CFLAGS = -Wall -Wextra -std=c99 -I$(SRC_DIR)
 LDFLAGS = 
 
 # Source files
-
 SRC = $(SRC_DIR)/boglux.c $(SRC_DIR)/command_parsing.c
 
 # Object files created at build
-
 OBJ = $(SRC:.c=.o)
 
 # Build program
 build: $(OBJ)
-	$(CC) $(OBJ) -o $(out) $(LDFLAGS)
+	$(CC) $(OBJ) -o $(OUT) $(LDFLAGS)  # Corrected $(OUT) instead of $(out)
 
 # Each source file separately
 %.o: %.c
@@ -41,3 +37,4 @@ pack:
 	zip -FSr file.zip README Makefile $(SRC) $(LIB_DIR)/*.h
 
 .PHONY: pack clean
+
