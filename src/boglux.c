@@ -1,6 +1,7 @@
-#include "../lib/command_parsing.h"
+#include "../lib/command_execute.h"
 
 int main()
 {
+    loop_shell();
     return 0;
 }

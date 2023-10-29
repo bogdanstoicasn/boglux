@@ -11,14 +11,14 @@ CFLAGS = -Wall -Wextra -std=c99 -I$(SRC_DIR)
 LDFLAGS = 
 
 # Source files
-SRC = $(SRC_DIR)/boglux.c $(SRC_DIR)/command_parsing.c
+SRC = $(SRC_DIR)/boglux.c $(SRC_DIR)/command_parsing.c $(SRC_DIR)/command_execute.c $(SRC_DIR)/command_build.c
 
 # Object files created at build
 OBJ = $(SRC:.c=.o)
 
 # Build program
 build: $(OBJ)
-	$(CC) $(OBJ) -o $(OUT) $(LDFLAGS)  # Corrected $(OUT) instead of $(out)
+	$(CC) $(OBJ) -o $(OUT) $(LDFLAGS)
 
 # Each source file separately
 %.o: %.c

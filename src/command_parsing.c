@@ -5,18 +5,18 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
-uint8_t *get_line()
+char *get_line()
 {
-	uint64_t position = 0;
-	uint64_t size = BUFFSIZE;
-	uint8_t *buff = malloc(BUFFSIZE * sizeof(char));
+	int position = 0;
+	int size = BUFFSIZE;
+	char *buff = malloc(BUFFSIZE * sizeof(char));
 
 	if (!buff) {
 		fprintf(stderr, "%sdash: Allocation errors%s\n", YELLOW, RESET);
 		exit(EXIT_FAILURE);
 	}
 
-	uint8_t c;
+	char c;
 	while (1) {
 		c = getchar();
 		if (c == EOF || c == '\n') {
@@ -38,13 +38,14 @@ uint8_t *get_line()
 	}
 }
 
-uint8_t **split_line(uint8_t *line)
+char **split_line(char *line)
 {
-	uint64_t position = 0;
-	uint64_t size = BUFFSIZE;
+	int position = 0;
+	int size = BUFFSIZE;
 
-	uint8_t **tokens = malloc(BUFFSIZE * sizeof(uint8_t *));
-	uint8_t *token;
+	char **tokens = malloc(BUFFSIZE * sizeof(char *));
+	char *token;
+	char **safeguard;
 	if (!tokens) {
 		fprintf(stderr, "%sdash: Allocation errors%s\n", YELLOW, RESET);
 		exit(EXIT_FAILURE);
@@ -57,8 +58,10 @@ uint8_t **split_line(uint8_t *line)
 
 		if (position >= size) {
 			size += BUFFSIZE;
-			tokens = realloc(tokens, size * sizeof(uint8_t *));
+			safeguard = tokens;
+			tokens = realloc(tokens, size * sizeof(char *));
 			if (!tokens) {
+				free(safeguard);
 				fprintf(stderr, "%sdash: Allocation errors%s\n", YELLOW, RESET);
 				exit(EXIT_FAILURE);
 			}
@@ -68,34 +71,4 @@ uint8_t **split_line(uint8_t *line)
 	tokens[position] = NULL;
 
 	return tokens;
-}
-
-uint64_t exit_shell()
-{
-	return 0;
-}
-
-uint64_t execute_shell(uint8_t **args)
-{
-	pid_t cpid;
-	int status;
-
-	if (strcmp(args[0], "exit") == 0) {
-		return exit_shell();
-	}
-
-	cpid = fork();
-
-	if (cpid == 0) {
-		if (execvp(args[0], args) < 0)
-			printf("dash: command not found: %s\n", args[0]);
-		exit(EXIT_FAILURE);
-
-	} else if (cpid < 0)
-		printf(YELLOW "Error forking" RESET "\n");
-	else {
-		waitpid(cpid, &status, WUNTRACED);
-	}
-
-  return 1;
 }
