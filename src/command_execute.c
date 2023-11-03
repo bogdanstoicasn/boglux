@@ -33,7 +33,7 @@ int launch_shell(char **args)
 
 	if (cpid == 0) {
 		if (execvp(args[0], args) < 0) {
-            perror("ERROR");
+            perror("ERROR execvp");
             free(*args);
             free(args);
             // if child process fails we must free the mem of command
@@ -56,7 +56,7 @@ void loop_shell()
 {
     char *line;
     char **args;
-    int status;
+    int status, count = 0;
 
     system("clear");
     shell_center_text("\033[1mBOGLUX\033[0m\n\n");
@@ -64,11 +64,15 @@ void loop_shell()
     do {
         printf("> ");
         line = get_line();
+
+        shell_history_saver(line, &count);
+        
         args = split_line(line);
         status = execute_shell(args);
-        shell_history_saver(args);
 
         free(line);
         free(args);
     } while (status);
+
+    shell_history_delete();
 }

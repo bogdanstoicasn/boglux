@@ -9,7 +9,11 @@ void shell_center_text(const char *text);
 
 int shell_cd(char **args);
 int shell_help(char **args);
-int shell_history_saver(char **args);
+
+int shell_history_saver(char *line, int *count);
+void shell_history_delete();
+int shell_history(char **args);
+
 int shell_exit();
 
 #endif

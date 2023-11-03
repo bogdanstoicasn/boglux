@@ -18,7 +18,7 @@ int (*const builtin_func[]) (char **) = {
 	&shell_cd,
 	&shell_help,
 	&shell_exit,
-	&shell_history_saver
+	&shell_history
 };
 
 void shell_center_text(const char *text)
@@ -67,8 +67,58 @@ int shell_help(char **args)
 
 // TODO: implement command saving using different process
 // open the file ex: fopen("/home/bogdan/cmd_hisotry.txt", "a");
-int shell_history_saver(char **args)
+int shell_history_saver(char *line, int *count)
+{
+	*count = *count +1;
+	char *dir = getenv("HOME");
+	char cpdir[128];
+	strcpy(cpdir, dir);
+	strcat(cpdir, "/cmd_history.txt");
+	
+	if (*count == 100) {
+		*count = 1;
+		if (remove(cpdir) != 0 ) {
+			fprintf(stderr, "Error removing history file\n");
+        	exit(EXIT_FAILURE);
+		}
+	}
+
+	FILE *fptr = fopen(cpdir, "a");
+	if (!fptr) {
+		fprintf(stderr, "ERROR: shell history unsaved");
+		exit(EXIT_FAILURE);
+	}
+
+	fprintf(fptr,"%s\n", line);
+	fflush(fptr);
+	fclose(fptr);
+	return 1;
+}
+
+void shell_history_delete()
+{
+	char *dir = getenv("HOME");
+	char cpdir[128];
+	strcpy(cpdir, dir);
+	strcat(cpdir, "/cmd_history.txt");
+	if (remove(cpdir) != 0 ) {
+		fprintf(stderr, "Error removing history file\n");
+        exit(EXIT_FAILURE);
+	}
+}
+int shell_history(char **args)
 {
 	(void)args;
+	char *dir = getenv("HOME");
+	char cpdir[128];
+	strcpy(cpdir, dir);
+	strcat(cpdir, "/cmd_history.txt");
+
+	FILE *fptr = fopen(cpdir, "r");
+	char c;
+	while ((c = fgetc(fptr)) != EOF)
+		printf("%c", c);
+	
+	fclose(fptr);
 	return 1;
 }
