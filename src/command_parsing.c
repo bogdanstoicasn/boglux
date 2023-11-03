@@ -1,9 +1,4 @@
 #include "../lib/command_parsing.h"
-#include <string.h>
-#include <inttypes.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/wait.h>
 
 char *get_line()
 {
@@ -68,6 +63,7 @@ char **split_line(char *line)
 		}
 		token = strtok(NULL, TOKEN_DELIM);
 	}
+
 	tokens[position] = NULL;
 
 	return tokens;

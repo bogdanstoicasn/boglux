@@ -2,6 +2,10 @@
 #define H_PARSING_H
 
 #include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 #define BUFFSIZE 1024
 
 #define YELLOW "\033[0;33m"

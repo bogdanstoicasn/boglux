@@ -1,11 +1,5 @@
 #include "../lib/command_build.h"
 #include "../lib/command_execute.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/ioctl.h>
-#include <sys/wait.h>
-#include <string.h>
 
 const char *builtin_str[4] = {
   "cd",

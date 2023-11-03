@@ -1,6 +1,12 @@
 #ifndef H_COMM_BUILD_H
 #define H_COMM_BUILD_H
 
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/ioctl.h>
+#include <sys/wait.h>
+#include <string.h>
 
 extern const char *builtin_str[4];
 extern int (*const builtin_func[]) (char **);

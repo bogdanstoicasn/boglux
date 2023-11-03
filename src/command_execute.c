@@ -1,11 +1,18 @@
 #include "../lib/command_execute.h"
 #include "../lib/command_build.h"
 #include "../lib/command_parsing.h"
-#include <unistd.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+
+void signal_handler_parent(int signum)
+{
+    (void)signum;
+    printf("\n");
+}
+
+void signal_handler_child(int signum)
+{
+    if (signum == SIGINT)
+        exit(EXIT_FAILURE);
+}
 
 int shell_builtins()
 {
@@ -20,7 +27,7 @@ int execute_shell(char **args)
     for (int i = 0 ; i < shell_builtins(); i++)
         if (strcmp(args[0], builtin_str[i]) == 0)
             return (*builtin_func[i])(args);
-    
+
     return launch_shell(args);
 }
 
@@ -30,8 +37,10 @@ int launch_shell(char **args)
 	int status;
 
 	cpid = fork();
+    signal(SIGINT, signal_handler_parent);
 
 	if (cpid == 0) {
+        signal(SIGINT, signal_handler_child);
 		if (execvp(args[0], args) < 0) {
             perror("ERROR execvp");
             free(*args);
@@ -43,6 +52,7 @@ int launch_shell(char **args)
 	} else if (cpid < 0)
 		perror("ERROR");
 	else {
+        status = 1;
 		do {
 			waitpid(cpid, &status, WUNTRACED);
 		} while(!WIFEXITED(status) && !WIFSIGNALED(status));
@@ -66,7 +76,7 @@ void loop_shell()
         line = get_line();
 
         shell_history_saver(line, &count);
-        
+
         args = split_line(line);
         status = execute_shell(args);
 

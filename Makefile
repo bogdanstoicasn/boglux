@@ -7,7 +7,7 @@ LIB_DIR = lib
 SRC_DIR = src
 
 # Flags for warnings and include directories
-CFLAGS = -Wall -Wextra -std=c99 -I$(SRC_DIR)
+CFLAGS = -Wall -Wextra -std=c11 -I$(SRC_DIR)
 LDFLAGS = 
 
 # Source files
